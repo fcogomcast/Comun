@@ -1,0 +1,65 @@
+plugins {
+    id 'java'
+}
+
+// Configuración del proyecto
+group 'es.tributasenasturias'
+version '1.0'
+
+repositories {
+    jcenter()
+}
+
+// Configuración de compilación y ejecución
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// Dependencias del proyecto
+dependencies
+        {
+            implementation 'org.apache.xmlbeans:xmlbeans:3.1.0'
+            implementation fileTree(dir: '/jar', include: ['*.jar'])
+            testImplementation 'junit:junit:4.12'
+
+        }
+
+// Ruta de las clases Java a compilar
+sourceSets {
+
+    main {
+        java {
+            srcDirs 'src'
+        }
+    }
+
+    test {
+        java {
+            srcDirs 'TestTributasLog/src'
+        }
+    }
+}
+
+// Tareas de compilación y empaquetado
+tasks.withType(JavaCompile)
+        {
+            options.encoding = 'Cp1252'
+        }
+
+// Configuración para el JAR
+jar {
+
+    archiveFileName = '$buildDir/libs/LogTributas.jar'
+
+    // Incluye la carpeta 'doc' en el JAR
+    from('doc') {
+        into 'doc'
+    }
+
+    // Incluye las clases de prueba y recursos de los tests en el JAR
+    from sourceSets.test.output
+}
+
+// Configuración para no ejecutar los tests durante la compilación
+tasks.withType(Test) {
+    enabled = false
+}
